@@ -37,6 +37,14 @@ def print_env():
             print(env1[i][j], end=' ')
         print()
 
+def number_clean():
+    clean_count = 0
+    for i in range(len(env1)):
+        for j in range(len(env1[i])):
+            if(env1[i][j] == 'Clean'):
+                clean_count +=1
+
+    print("Number of spaces cleaned: ", clean_count)
 #print_env()
 
 def dumb_robot(robot1, env1):
@@ -45,8 +53,8 @@ def dumb_robot(robot1, env1):
     #print_env()
     #turn_right(robot1)
     #turn_left(robot1)
+    actions = 0
     while(robot1.power == 'on'):
-        #print_env()
         if(robot1.dirt_sensor == 1):
             print('cleaning')
             suck(robot1, env1)
@@ -61,7 +69,13 @@ def dumb_robot(robot1, env1):
             print('moving forward')
             move_forward(robot1)
 
+        actions+=1
         check_sensors(robot1, env1)
+
+    print_env()
+    print("Actions taken: ", actions)
+    number_clean()
+        
     
 def move_forward(robot1):
     if(robot1.direction == 'up'):
