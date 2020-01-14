@@ -40,7 +40,7 @@ env2 = [["Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall "
         ["Wall ","Home ","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Wall "],
         ["Wall ", "Wall ","Wall ","Wall ", "Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall "]]
 
-
+#print (env2[11][1])
 def print_env(env):
     #print env1 out nicely
     for i in range(len(env)):
@@ -49,22 +49,17 @@ def print_env(env):
         print()
 
 
-def number_clean():
+def number_clean(env):
     clean_count = 0
-    for i in range(len(env1)):
-        for j in range(len(env1[i])):
-            if(env1[i][j] == 'Clean'):
+    for i in range(len(env)):
+        for j in range(len(env[i])):
+            if(env[i][j] == 'Clean'):
                 clean_count +=1
 
     print("Number of spaces cleaned: ", clean_count)
 #print_env()
 
 def dumb_robot(robot, env1):
-    #move_forward(robot)
-    #suck(robot, env1)
-    #print_env()
-    #turn_right(robot)
-    #turn_left(robot)
     actions = 0
     while(robot.power == 'on'):
         if(robot.dirt_sensor == 1):
@@ -79,7 +74,7 @@ def dumb_robot(robot, env1):
             robot.power = 'off'
         else:
             print('moving forward')
-            move_forward(robot)
+            move_forward(robot, env1)
 
         actions+=1
         check_sensors(robot, env1)
@@ -107,7 +102,7 @@ def rand_robot(robot, env1):
             if turn != "forward":
                 turn_right_left(turn, robot)
             else:
-                move_forward(robot)
+                move_forward(robot, env1)
                 print('moving forward')
         actions+=1
         check_sensors(robot, env1)
@@ -118,10 +113,12 @@ def rand_robot(robot, env1):
 
 def smart_robot(robot, env):
     actions = 0
+    print(robot.x, robot.y, robot.location)
     while(robot.power == 'on'):
         if(robot.dirt_sensor == 1):
             print('cleaning')
             suck(robot, env)
+           # print_env(env)
         elif(robot.x == 10 and robot.y == 10 and robot.direction == 'right'):
             #hardcode to get robot out of the corner part 1
             print('turning left3')
@@ -148,7 +145,7 @@ def smart_robot(robot, env):
         elif(robot.location == 'Clean' and robot.wall_sensor == 0):
             print('moving forward2', robot.x, robot.y)
             #print_env(env1)
-            move_forward(robot)
+            move_forward(robot, env)
         elif(check_wall(robot, env) and robot.y%2 == 0 and robot.direction == 'right'):
             print('turning right2')
             turn_right(robot)
@@ -159,14 +156,14 @@ def smart_robot(robot, env):
             robot.wall_sensor = 0
         else:
             print('moving forward')
-            move_forward(robot)
+            move_forward(robot, env)
 
         actions+=1
         check_sensors(robot, env)
 
     print_env(env)
     print("Actions taken: ", actions)
-    number_clean()
+    number_clean(env)
 # robot takes left or right turn
 def turn_right_left(turn, robot):
     if turn == "left":
@@ -177,7 +174,7 @@ def turn_right_left(turn, robot):
         print('turning right')
 
 
-def move_forward(robot):
+def move_forward(robot, env):
     if(robot.direction == 'up'):
         #print("moving up in the world")
         robot.x -=1
@@ -187,11 +184,12 @@ def move_forward(robot):
         robot.x+=1
     elif(robot.direction == 'left'):
         robot.y-=1
-    robot.location = env1[robot.x][robot.y]
+    robot.location = env[robot.x][robot.y]
+    print('moved to: ', robot.x, robot.y, robot.location)
 
 
-def suck(robot, env1):
-    env1[robot.x][robot.y] = 'Clean'
+def suck(robot, env):
+    env[robot.x][robot.y] = 'Clean'
     robot.dirt_sensor = 0
 
 
@@ -220,7 +218,7 @@ def turn_left(robot):
 def check_sensors(robot, env):
     if(robot.location == 'Home '):
         robot.home_sensor = 1
-    if(env1[robot.x][robot.y] == 'Dirty'):
+    if(env[robot.x][robot.y] == 'Dirty'):
         robot.dirt_sensor = 1
     if(robot.direction == 'up' and env[robot.x-1][robot.y] == 'Wall '):
         robot.wall_sensor = 1
