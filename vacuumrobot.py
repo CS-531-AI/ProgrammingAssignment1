@@ -26,13 +26,28 @@ env1 = [["Wall ", "Wall ","Wall ", "Wall ", "Wall ","Wall ","Wall ","Wall ","Wal
         ["Wall ","Home ","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Wall "],
         ["Wall ", "Wall ","Wall ","Wall ", "Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall "]]
 
+env2 = [["Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall "],
+        ["Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Wall "],
+        ["Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall "],
+        ["Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall "],
+        ["Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall "],
+        ["Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall "],
+        ["Wall ","Dirty","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Dirty","Wall "],
+        ["Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall "],
+        ["Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall "],
+        ["Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall "],
+        ["Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Wall "],
+        ["Wall ","Home ","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Wall "],
+        ["Wall ", "Wall ","Wall ","Wall ", "Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall "]]
 
-def print_env():
+
+def print_env(env):
     #print env1 out nicely
-    for i in range(len(env1)):
-        for j in range(len(env1[i])):
-            print(env1[i][j], end=' ')
+    for i in range(len(env)):
+        for j in range(len(env[i])):
+            print(env[i][j], end=' ')
         print()
+
 
 def number_clean():
     clean_count = 0
@@ -97,7 +112,7 @@ def rand_robot(robot, env1):
         actions+=1
         check_sensors(robot, env1)
 
-    print_env()
+    print_env(env1)
     print("Actions taken: ", actions)
     number_clean()
 
