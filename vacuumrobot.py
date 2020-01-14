@@ -119,15 +119,9 @@ def smart_robot(robot, env):
             print('cleaning')
             suck(robot, env)
            # print_env(env)
-        elif(robot.x == 10 and robot.y == 10 and robot.direction == 'right'):
-            #hardcode to get robot out of the corner part 1
-            print('turning left3')
-            turn_left(robot)
-            robot.wall_sensor = 0
-        elif(check_wall(robot, env) and robot.y == 10 and robot.direction == 'up'):
-            #hardcode to get robot out of the corner part 2
-            print('turning left4')
-            turn_left(robot)
+        elif(check_wall(robot, env) == 2 and robot.direction == 'down' and robot.wall_sensor == 1):
+            print("turning right in corner")
+            turn_right(robot)
             robot.wall_sensor = 0
         elif(robot.wall_sensor == 1 and robot.y%2 == 1):
             print('turning right')
@@ -230,14 +224,15 @@ def check_sensors(robot, env):
         robot.wall_sensor = 1
 
 def check_wall(robot, env):
+    num_walls = 0
     if(env[robot.x-1][robot.y] == 'Wall '):
-        return True
-    elif(env[robot.x+1][robot.y] == 'Wall '):
-        return True
-    elif(env[robot.x][robot.y+1] == 'Wall '):
-        return True
-    elif(env[robot.x][robot.y-1] == 'Wall '):
-        return True
-    else:
-        return False
+        num_walls += 1
+    if(env[robot.x+1][robot.y] == 'Wall '):
+        num_walls += 1
+    if(env[robot.x][robot.y+1] == 'Wall '):
+        num_walls += 1
+    if(env[robot.x][robot.y-1] == 'Wall '):
+        num_walls += 1
 
+    return num_walls
+    
