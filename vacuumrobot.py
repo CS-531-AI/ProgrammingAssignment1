@@ -59,12 +59,12 @@ def number_clean(env):
     print("Number of spaces cleaned: ", clean_count)
 #print_env()
 
-def dumb_robot(robot, env1):
+def dumb_robot(robot, env):
     actions = 0
     while(robot.power == 'on'):
         if(robot.dirt_sensor == 1):
             print('cleaning')
-            suck(robot, env1)
+            suck(robot, env)
         elif(robot.wall_sensor == 1):
             print('turning right')
             turn_right(robot)
@@ -74,20 +74,20 @@ def dumb_robot(robot, env1):
             robot.power = 'off'
         else:
             print('moving forward')
-            move_forward(robot, env1)
+            move_forward(robot, env)
 
         actions+=1
-        check_sensors(robot, env1)
+        check_sensors(robot, env)
 
-    print_env()
+    print_env(env)
     print("Actions taken: ", actions)
-    number_clean()
+    number_clean(env)
 
-def rand_robot(robot, env1):
+def rand_robot(robot, env):
     actions = 0
     while(robot.power == 'on'):
         if(robot.dirt_sensor == 1):
-            suck(robot, env1)
+            suck(robot, env)
             print('cleaning')
         elif(robot.wall_sensor == 1):
             turn = rand.choice(["left", "right"])
@@ -102,14 +102,14 @@ def rand_robot(robot, env1):
             if turn != "forward":
                 turn_right_left(turn, robot)
             else:
-                move_forward(robot, env1)
+                move_forward(robot, env)
                 print('moving forward')
         actions+=1
-        check_sensors(robot, env1)
+        check_sensors(robot, env)
 
-    print_env(env1)
+    print_env(env)
     print("Actions taken: ", actions)
-    number_clean()
+    number_clean(env)
 
 def smart_robot(robot, env):
     actions = 0
