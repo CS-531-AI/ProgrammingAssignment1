@@ -116,6 +116,57 @@ def rand_robot(robot, env1):
     print("Actions taken: ", actions)
     number_clean()
 
+def smart_robot(robot, env):
+    actions = 0
+    while(robot.power == 'on'):
+        if(robot.dirt_sensor == 1):
+            print('cleaning')
+            suck(robot, env)
+        elif(robot.x == 10 and robot.y == 10 and robot.direction == 'right'):
+            #hardcode to get robot out of the corner part 1
+            print('turning left3')
+            turn_left(robot)
+            robot.wall_sensor = 0
+        elif(check_wall(robot, env) and robot.y == 10 and robot.direction == 'up'):
+            #hardcode to get robot out of the corner part 2
+            print('turning left4')
+            turn_left(robot)
+            robot.wall_sensor = 0
+        elif(robot.wall_sensor == 1 and robot.y%2 == 1):
+            print('turning right')
+            turn_right(robot)
+            robot.wall_sensor = 0
+            robot.location = env[robot.x][robot.y]
+        elif(robot.wall_sensor == 1 and robot.y%2 == 0 and robot.direction == 'down'):
+            print('turning left')
+            turn_left(robot)
+            robot.wall_sensor = 0
+            robot.location = env[robot.x][robot.y]
+        elif(robot.home_sensor == 1):
+            print('turning off')
+            robot.power = 'off'
+        elif(robot.location == 'Clean' and robot.wall_sensor == 0):
+            print('moving forward2', robot.x, robot.y)
+            #print_env(env1)
+            move_forward(robot)
+        elif(check_wall(robot, env) and robot.y%2 == 0 and robot.direction == 'right'):
+            print('turning right2')
+            turn_right(robot)
+            robot.wall_sensor = 0
+        elif(check_wall(robot, env) and robot.y%2 == 1 and robot.direction == 'right'):
+            print('turning left2')
+            turn_left(robot)
+            robot.wall_sensor = 0
+        else:
+            print('moving forward')
+            move_forward(robot)
+
+        actions+=1
+        check_sensors(robot, env)
+
+    print_env(env)
+    print("Actions taken: ", actions)
+    number_clean()
 # robot takes left or right turn
 def turn_right_left(turn, robot):
     if turn == "left":
@@ -166,16 +217,29 @@ def turn_left(robot):
         robot.direction = 'down'
     print("now facing: ", robot.direction)
 
-def check_sensors(robot, env1):
+def check_sensors(robot, env):
     if(robot.location == 'Home '):
         robot.home_sensor = 1
     if(env1[robot.x][robot.y] == 'Dirty'):
         robot.dirt_sensor = 1
-    if(robot.direction == 'up' and env1[robot.x-1][robot.y] == 'Wall '):
+    if(robot.direction == 'up' and env[robot.x-1][robot.y] == 'Wall '):
         robot.wall_sensor = 1
-    elif(robot.direction == 'down' and env1[robot.x+1][robot.y] == 'Wall '):
+    elif(robot.direction == 'down' and env[robot.x+1][robot.y] == 'Wall '):
         robot.wall_sensor = 1
-    elif(robot.direction == 'right' and env1[robot.x][robot.y+1] == 'Wall '):
+    elif(robot.direction == 'right' and env[robot.x][robot.y+1] == 'Wall '):
         robot.wall_sensor = 1
-    elif(robot.direction == 'left' and env1[robot.x][robot.y-1] == 'Wall '):
+    elif(robot.direction == 'left' and env[robot.x][robot.y-1] == 'Wall '):
         robot.wall_sensor = 1
+
+def check_wall(robot, env):
+    if(env[robot.x-1][robot.y] == 'Wall '):
+        return True
+    elif(env[robot.x+1][robot.y] == 'Wall '):
+        return True
+    elif(env[robot.x][robot.y+1] == 'Wall '):
+        return True
+    elif(env[robot.x][robot.y-1] == 'Wall '):
+        return True
+    else:
+        return False
+

@@ -5,10 +5,11 @@ def main():
     # robot1 = r.Robot(10, 1, r.env1[10][1])
     # r.dumb_robot(robot1, r.env1)
 
-    robot2 = r.Robot(10, 1, r.env1[10][1])
-    r.rand_robot(robot2, r.env1)
+    #robot2 = r.Robot(10, 1, r.env1[10][1])
+    #r.rand_robot(robot2, r.env1)
 
-
+    robot3 = r.Robot(10, 1, r.env1[10][1])
+    r.smart_robot(robot3, r.env1)
 
 
 
