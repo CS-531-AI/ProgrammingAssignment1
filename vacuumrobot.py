@@ -1,4 +1,5 @@
 import random as rand
+from copy import deepcopy
 
 
 class Robot:
@@ -12,7 +13,11 @@ class Robot:
         self.wall_sensor = 0
         self.home_sensor = 0
 
-#First Pass Hard Code of env1
+    def reset(self, x, y, location):
+        self.__init__(x, y, location)
+
+
+# First Pass Hard Code of env1
 env1 = [["Wall ", "Wall ","Wall ", "Wall ", "Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall ","Wall "],
         ["Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Wall "],
         ["Wall ","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Dirty","Wall "],
@@ -57,14 +62,19 @@ def number_clean(env):
                 clean_count +=1
 
     print("Number of spaces cleaned: ", clean_count)
+    return clean_count
 #print_env()
 
+
 def dumb_robot(robot, env):
+    # make sure env1 stays constant
+    env_copy = deepcopy(env)
+
     actions = 0
     while(robot.power == 'on'):
         if(robot.dirt_sensor == 1):
             print('cleaning')
-            suck(robot, env)
+            suck(robot, env_copy)
         elif(robot.wall_sensor == 1):
             print('turning right')
             turn_right(robot)
@@ -74,20 +84,25 @@ def dumb_robot(robot, env):
             robot.power = 'off'
         else:
             print('moving forward')
-            move_forward(robot, env)
+            move_forward(robot, env_copy)
 
         actions+=1
-        check_sensors(robot, env)
+        check_sensors(robot, env_copy)
 
-    print_env(env)
+    print_env(env_copy)
     print("Actions taken: ", actions)
-    number_clean(env)
+    cc = number_clean(env_copy)
+    return actions, cc
+
 
 def rand_robot(robot, env):
+    # make sure env1 stays constant
+    env_copy = deepcopy(env)
+
     actions = 0
     while(robot.power == 'on'):
         if(robot.dirt_sensor == 1):
-            suck(robot, env)
+            suck(robot, env_copy)
             print('cleaning')
         elif(robot.wall_sensor == 1):
             turn = rand.choice(["left", "right"])
@@ -102,24 +117,31 @@ def rand_robot(robot, env):
             if turn != "forward":
                 turn_right_left(turn, robot)
             else:
-                move_forward(robot, env)
+                move_forward(robot, env_copy)
                 print('moving forward')
         actions+=1
-        check_sensors(robot, env)
+        check_sensors(robot, env_copy)
 
-    print_env(env)
+    print_env(env_copy)
     print("Actions taken: ", actions)
-    number_clean(env)
+    clean_count = number_clean(env_copy)
+    print("\n\n")
+
+    return actions, clean_count
+
 
 def smart_robot(robot, env):
+    # make sure env1 stays constant
+    env_copy = deepcopy(env)
+
     actions = 0
     print(robot.x, robot.y, robot.location)
     while(robot.power == 'on'):
         if(robot.dirt_sensor == 1):
             print('cleaning')
-            suck(robot, env)
-           # print_env(env)
-        elif(check_wall(robot, env) == 2 and robot.direction == 'down' and robot.wall_sensor == 1):
+            suck(robot, env_copy)
+           # print_env(env_copy)
+        elif(check_wall(robot, env_copy) == 2 and robot.direction == 'down' and robot.wall_sensor == 1):
             print("turning right in corner")
             turn_right(robot)
             robot.wall_sensor = 0
@@ -127,37 +149,41 @@ def smart_robot(robot, env):
             print('turning right')
             turn_right(robot)
             robot.wall_sensor = 0
-            robot.location = env[robot.x][robot.y]
+            robot.location = env_copy[robot.x][robot.y]
         elif(robot.wall_sensor == 1 and robot.y%2 == 0 and robot.direction == 'down'):
             print('turning left')
             turn_left(robot)
             robot.wall_sensor = 0
-            robot.location = env[robot.x][robot.y]
+            robot.location = env_copy[robot.x][robot.y]
         elif(robot.home_sensor == 1):
             print('turning off')
             robot.power = 'off'
         elif(robot.location == 'Clean' and robot.wall_sensor == 0):
             print('moving forward2', robot.x, robot.y)
-            #print_env(env1)
-            move_forward(robot, env)
-        elif(check_wall(robot, env) and robot.y%2 == 0 and robot.direction == 'right'):
+            #print_env(env_copy1)
+            move_forward(robot, env_copy)
+        elif(check_wall(robot, env_copy) and robot.y%2 == 0 and robot.direction == 'right'):
             print('turning right2')
             turn_right(robot)
             robot.wall_sensor = 0
-        elif(check_wall(robot, env) and robot.y%2 == 1 and robot.direction == 'right'):
+        elif(check_wall(robot, env_copy) and robot.y%2 == 1 and robot.direction == 'right'):
             print('turning left2')
             turn_left(robot)
             robot.wall_sensor = 0
         else:
             print('moving forward')
-            move_forward(robot, env)
+            move_forward(robot, env_copy)
 
         actions+=1
-        check_sensors(robot, env)
+        check_sensors(robot, env_copy)
 
-    print_env(env)
+    print_env(env_copy)
     print("Actions taken: ", actions)
-    number_clean(env)
+    cc = number_clean(env_copy)
+
+    return actions, cc
+
+
 # robot takes left or right turn
 def turn_right_left(turn, robot):
     if turn == "left":
@@ -198,6 +224,7 @@ def turn_right(robot):
         robot.direction = 'up'
     print("now facing: ", robot.direction)
 
+
 def turn_left(robot):
     if(robot.direction == 'up'):
         robot.direction = 'left'
@@ -208,6 +235,7 @@ def turn_left(robot):
     elif(robot.direction == 'left'):
         robot.direction = 'down'
     print("now facing: ", robot.direction)
+
 
 def check_sensors(robot, env):
     if(robot.location == 'Home '):
@@ -223,6 +251,7 @@ def check_sensors(robot, env):
     elif(robot.direction == 'left' and env[robot.x][robot.y-1] == 'Wall '):
         robot.wall_sensor = 1
 
+
 def check_wall(robot, env):
     num_walls = 0
     if(env[robot.x-1][robot.y] == 'Wall '):
@@ -235,4 +264,3 @@ def check_wall(robot, env):
         num_walls += 1
 
     return num_walls
-    
