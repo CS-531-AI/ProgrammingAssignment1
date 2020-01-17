@@ -54,14 +54,10 @@ def main():
             a, c = v.smart_robot(env2_robots[2], v.env2)
             smart_data.append((a, c))
 
-    # plot each environment on a scatter plot
-    plot_env(env1_action, env1_clean, "Environment 1", "env1")
-    plot_env(env2_action, env2_clean, "Environment 2", "env2")
-
     # find the avgs for random robot for each environment
-    print("\nEnvironment 1 - Random Robot")
+    print("\nEnvironment 1 - 90% Clean")
     action_avg1, clean_avg1 = random_stats(env1_action, env1_clean)
-    print("\nEnvironment 2 - Random Robot")
+    print("\nEnvironment 2 - 90% Clean")
     action_avg2, clean_avg2 = random_stats(env2_action, env2_clean)
 
     # construct rows for the table
@@ -76,6 +72,10 @@ def main():
     print("\nAgent Performance Across Environments")
     print(t)
 
+    # plot each environment on a scatter plot
+    plot_env(env1_action, env1_clean, "Environment 1", "env1")
+    plot_env(env2_action, env2_clean, "Environment 2", "env2")
+
 
 # plot the environment on a scatter plot
 def plot_env(action, clean, title, file):
@@ -88,8 +88,8 @@ def plot_env(action, clean, title, file):
     plt.plot(np.unique(action), np.poly1d(np.polyfit(action, clean, 1))(np.unique(action)))
 
     # show/save plot
-    # plt.show()
-    plt.savefig(file, bbox_inches='tight')
+    plt.show()
+    # plt.savefig(file, bbox_inches='tight')
 
 
 def random_stats(action, clean):
