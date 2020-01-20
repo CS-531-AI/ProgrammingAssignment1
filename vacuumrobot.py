@@ -1,3 +1,16 @@
+"""
+Christopher Mendez & Rupika Dikkala
+Programming Assignment 1
+Vacuum Cleaning Agent
+CS 531 - AI
+January 20, 2020
+***********************************
+This file contains the Robot class
+and the functions defining the
+location/turning mechanisms for each
+agent.
+"""
+
 import random as rand
 from copy import deepcopy
 

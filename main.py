@@ -1,3 +1,16 @@
+"""
+Christopher Mendez & Rupika Dikkala
+Programming Assignment 1
+Vacuum Cleaning Agent
+CS 531 - AI
+January 20, 2020
+***********************************
+This file runs all three agents in
+both environments and generates plots
+for the random agent, and tables with
+all the statistics.
+"""
+
 import vacuumrobot as v
 import matplotlib.pyplot as plt
 import numpy as np
